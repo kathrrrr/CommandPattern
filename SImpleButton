@@ -1,6 +1,7 @@
-#Importer alt fra tkinter
-from tkinter import *  
-from abc import ABC, abstractmethod 
+
+
+from tkinter import *
+from abc import ABC, abstractmethod
 
 class Command(ABC):
     @abstractmethod
@@ -8,27 +9,47 @@ class Command(ABC):
         pass
 
 class SetBlackBackground(Command):
-    def __init__(self):
-        super()
-        
-
+    def __init__(self, root):
+        super().__init__()
+        self.root = root
 
     def execute(self):
-        root.configure(background='black')
+        self.root.configure(background='black')
 
+class SetGreenBackground(Command):
+    def __init__(self, root):
+        super().__init__()
+        self.root = root
 
-dui = SetBlackBackground()
-#Lav et tkinter vindue
-root = Tk()              
- 
-#Åben vinduet
-root.geometry('100x100') 
+    def execute(self):
+        self.root.configure(background='green')
 
-#Lav en knap
-btnBlack = Button(root, text = 'Sort baggrund !', bd = '5',
-                          command = dui.execute) 
- 
-# Sæt positionen af knap på vindue   
-btnBlack.pack(side = 'top')    
- 
+def key_pressed(event):
+    
+    if event.char == 'g':    
+        gbg.execute()
+    if event.char == 's':
+        dui.execute()
+
+# Lav et tkinter vindue
+root = Tk()
+
+# Åben vinduet
+root.geometry('100x100')
+
+dui = SetBlackBackground(root)
+gbg = SetGreenBackground(root)
+
+# Lav en knap
+btnBlack = Button(root, text='Sort baggrund !', bd='5', command=dui.execute)
+
+# Sæt positionen af knap på vindue
+btnBlack.pack(side='top')
+
+btnGreen = Button(root, text="Grøn Baggrund", bd='5', command=gbg.execute)
+btnGreen.pack(side='bottom')
+
+# Bind tastaturhendelse
+root.bind("<Key>", key_pressed)
+
 root.mainloop()
